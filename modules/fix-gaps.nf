@@ -3,10 +3,10 @@ process FIX_GAPS {
     publishDir "${params.output}/fix-gaps", mode: "copy"
 
     input:
-        tuple val(sample_id), val(sequences)
+        tuple val(sample_id), path(sequences)
     
     output:
-        tuple val(sample_id), val(ungapped_sequences)
+        tuple val(sample_id), path("${sample_id}-ungapped.fasta")
 
     script:
         sample_id = sample_id.replaceAll("\\s","")
