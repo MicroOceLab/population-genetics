@@ -6,7 +6,8 @@ process CALCULATE_SUBSTITUTION_MODEL {
         tuple val(sample_id), path(combined_consensus_alignment)
     
     output:
-        tuple val(sample_id), path("${sample_id}-substitution-model.txt")
+        tuple val(sample_id), path("${sample_id}-substitution-model.out"), emit: output
+        tuple val(sample_id), path("${sample_id}-substitution-model.tre"), emit: tree
 
     script:
         """
@@ -15,6 +16,6 @@ process CALCULATE_SUBSTITUTION_MODEL {
             -d nt \
             -p 4 \
             -T raxml \
-            -o ${sample_id}-substitution-model.txt
+            -o ${sample_id}-substitution-model
         """
 }
