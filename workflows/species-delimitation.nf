@@ -1,6 +1,6 @@
 include { PREPARE_SAMPLE_ID                          } from '../modules/prepare-sample-id'
 include { FIX_GAPS                                   } from '../modules/fix-gaps'
-include { FIX_FORMAT                                 } from '../modules/fix-gaps'
+include { FIX_FORMAT                                 } from '../modules/fix-format'
 include { MAKE_ALIGNMENT                             } from '../modules/make-alignment'
 include { MAKE_CONSENSUS_SEQUENCE                    } from '../modules/make-consensus-sequence'
 include { COMBINE_CONSENSUS_SEQUENCES                } from '../modules/combine-consensus-sequences'
