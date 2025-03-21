@@ -7,7 +7,7 @@ process CALCULATE_SUBSTITUTION_MODEL {
     
     output:
         tuple val(sample_id), path("${sample_id}-substitution-model.out"), emit: output
-        tuple val(sample_id), path("${sample_id}-substitution-model.tre"), emit: tree
+        tuple val(sample_id), path("${sample_id}-substitution-model.tree"), emit: tree
 
     script:
         """
