@@ -1,5 +1,5 @@
 process FIX_GAPS {
-    container "alpine:3.21.3"
+    container "MicroOceLab/python:1.0"
     publishDir "${params.output}/fix-gaps", mode: "copy"
 
     input:

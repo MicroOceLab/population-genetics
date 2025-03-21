@@ -1,5 +1,5 @@
 process COMBINE_CONSENSUS_SEQUENCES {
-    container "alpine:3.21.3"
+    container "MicroOceLab/python:1.0"
     publishDir "${params.output}/combine-consensus-sequences", mode: "copy"
 
     input:
