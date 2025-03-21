@@ -1,5 +1,7 @@
 mkdir -p data
 mkdir -p results
+
+docker build --file assets/python.Dockerfile --tag MicroOceLab/python:1.0 .
 docker pull alpine:3.21.3
 docker pull quay.io/biocontainers/mafft:7.221--0
 docker pull quay.io/biocontainers/emboss:5.0.0--h362c646_6
