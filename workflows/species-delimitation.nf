@@ -14,7 +14,13 @@ include { CALCULATE_MPD                              } from '../modules/calculat
 workflow SPECIES_DELIMITATION {
     main:
         Channel.fromPath('./data/*.fasta')
-            .mix(Channel.fromPath('./data/*.fas'))
+            .set {ch_reference_fasta}
+        
+        Channel.fromPath('./data/*.fas')
+            .set {ch_reference_fas}
+        
+        ch_reference_fasta
+            .mix(ch_reference_fas)
             .set {ch_reference_sequences}
 
         PREPARE_SAMPLE_ID(ch_reference_sequences)
