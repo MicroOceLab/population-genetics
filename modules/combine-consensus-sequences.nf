@@ -6,10 +6,10 @@ process COMBINE_CONSENSUS_SEQUENCES {
         tuple val(sample_id), val(consensus_sequences)
     
     output:
-        tuple val("combined-consensus"), path("combined-consensus.fasta")
+        tuple val(sample_id), path("${sample_id}.fasta")
 
     script:
         """
-        cat consensus_sequences >> combined-consensus.fasta
+        cat ${consensus_sequences} >> ${sample_id}.fasta
         """
 }

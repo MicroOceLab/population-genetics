@@ -36,11 +36,15 @@ workflow SPECIES_DELIMITATION {
             .set {ch_reference_alignments}
          
         MAKE_CONSENSUS_SEQUENCE(ch_reference_alignments)
-            .set {ch_reference_consensus_sequences}
+            .set {ch_reference_consensus}
 
-        COMBINE_CONSENSUS_SEQUENCES(ch_reference_consensus_sequences
+        Channel.of("combined-consensus")
+            .set {ch_combined_consensus_id}
+
+        COMBINE_CONSENSUS_SEQUENCES(ch_combined_consensus_id
+            .combine(ch_reference_consensus.squashed_sequences
             .reduce("") {sequence_1, sequence_2 ->
-                "$sequence_1 $sequence_2"})
+                "$sequence_1 $sequence_2"}))
             .set {ch_combined_reference_consensus_sequences}
         
         MAKE_CONSENSUS_ALIGNMENT(ch_combined_reference_consensus_sequences)
