@@ -13,6 +13,8 @@ process MAKE_CONSENSUS_SEQUENCE {
         """
         cons \
             -sequence ${alignment} \
-            -outseq ${sample_id}-consensus.fasta
+            -outseq ${sample_id}-consensus.fasta \
+            -name ${sample_id}-consensus \
+            -plurality 0.2
         """
 }
