@@ -10,6 +10,6 @@ process FIX_FORMAT {
 
     script:
         """
-        fix-format.sh ${sequences} ${sample_id}-formatted.fasta
+        fix-format.sh ${ungapped_sequences} ${sample_id}-formatted.fasta
         """
 }
