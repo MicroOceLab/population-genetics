@@ -1,5 +1,5 @@
 process PREPARE_SAMPLE_ID {
-    container "alpine:3.21.3"
+    container "MicroOceLab/python:1.0"
 
     input:
         val(sequences)
