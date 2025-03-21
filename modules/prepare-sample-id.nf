@@ -5,7 +5,7 @@ process PREPARE_SAMPLE_ID {
         val(sequences)
     
     output:
-        tuple stdout, path(sequences)
+        tuple stdout, val(sequences)
 
     script:
         """
