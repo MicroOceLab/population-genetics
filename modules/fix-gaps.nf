@@ -9,8 +9,6 @@ process FIX_GAPS {
         tuple val(sample_id), path("${sample_id}-ungapped.fasta")
 
     script:
-        sample_id = sample_id.replaceAll("\\s","")
-
         """
         fix-gaps.sh ${sequences} ${sample_id}-ungapped.fasta
         """

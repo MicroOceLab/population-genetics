@@ -5,10 +5,10 @@ process PREPARE_SAMPLE_ID {
         val(sequences)
     
     output:
-        tuple stdout, val(sequences)
+        tuple eval("echo \${SAMPLE_ID}"), val(sequences)
 
     script:
         """
-        echo `prepare-sample-id.py ${sequences}`
+        SAMPLE_ID=`prepare-sample-id.py ${sequences}`
         """
 }
