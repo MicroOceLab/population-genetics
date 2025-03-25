@@ -1,6 +1,7 @@
 process MAKE_PHYLOGENY {
     container "quay.io/biocontainers/raxml-ng:0.9.0--h192cbe9_1"
     publishDir "${params.output}/make-phylogeny", mode: "copy"
+    cache "deep"
 
     input:
         tuple val(sample_id), path(alignment), val(substitution_model)
