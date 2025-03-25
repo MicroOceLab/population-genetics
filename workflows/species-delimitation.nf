@@ -54,7 +54,7 @@ workflow SPECIES_DELIMITATION {
             .set {ch_reference_substitution}
         
         MAKE_PHYLOGENY(ch_reference_consensus_alignment
-            .combine(ch_reference_substitution.model))
+            .join(ch_reference_substitution.model))
             .set {ch_reference_phylogeny}
         
         MAKE_PD_MATRIX(ch_reference_phylogeny)
