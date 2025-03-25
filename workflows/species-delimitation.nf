@@ -1,5 +1,4 @@
 include { PREPARE_SAMPLE_ID                          } from '../modules/prepare-sample-id'
-include { FIX_GAPS                                   } from '../modules/fix-gaps'
 include { FIX_FORMAT                                 } from '../modules/fix-format'
 include { MAKE_ALIGNMENT                             } from '../modules/make-alignment'
 include { MAKE_CONSENSUS_SEQUENCE                    } from '../modules/make-consensus-sequence'
@@ -25,11 +24,8 @@ workflow SPECIES_DELIMITATION {
 
         PREPARE_SAMPLE_ID(ch_reference_sequences)
             .set {ch_reference_sequences_with_id}
-
-        FIX_GAPS(ch_reference_sequences_with_id)
-            .set {ch_ungapped_reference_sequences}
         
-        FIX_FORMAT(ch_ungapped_reference_sequences)
+        FIX_FORMAT(ch_reference_sequences_with_id)
             .set {ch_formatted_reference_sequences}
          
         MAKE_ALIGNMENT(ch_formatted_reference_sequences)

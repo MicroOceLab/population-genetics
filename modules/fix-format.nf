@@ -3,13 +3,14 @@ process FIX_FORMAT {
     publishDir "${params.output}/fix-format", mode: "copy"
 
     input:
-        tuple val(sample_id), path(ungapped_sequences)
+        tuple val(sample_id), path(sequences)
     
     output:
         tuple val(sample_id), path("${sample_id}-formatted.fasta")
 
     script:
         """
-        fix-headers.sh ${ungapped_sequences} ${sample_id}-formatted.fasta
+        fix-gaps.sh ${sequences} ${sample_id}-ungapped.fasta
+        fix-headers.sh ${sample_id}-ungapped.fasta ${sample_id}-formatted.fasta
         """
 }
