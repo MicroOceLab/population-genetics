@@ -51,9 +51,9 @@ workflow SPECIES_DELIMITATION {
             .set {ch_reference_consensus_alignment}
          
         CALCULATE_SUBSTITUTION_MODEL(ch_reference_consensus_alignment)
-            .set {ch_reference_substitution_model}
+            .set {ch_reference_substitution}
         
-        MAKE_PHYLOGENY(ch_reference_consensus_alignment, ch_reference_substitution_model)
+        MAKE_PHYLOGENY(ch_reference_consensus_alignment, ch_reference_substitution.model)
             .set {ch_reference_phylogeny}
         
         MAKE_PD_MATRIX(ch_reference_phylogeny)
