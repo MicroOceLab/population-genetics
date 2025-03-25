@@ -7,7 +7,6 @@ process MAKE_PHYLOGENY {
     
     output:
         tuple val(sample_id), path("${sample_id}.raxml.bestTree.tre"), emit: best_tree
-        tuple val(sample_id), path("${sample_id}.raxml.bestTreeCollapsed.tre"), emit: best_tree_collapsed
         tuple val(sample_id), path("${sample_id}.raxml.bootstraps.tre"), emit: bootstraps
         tuple val(sample_id), path("${sample_id}.raxml.log.txt"), emit: log
         tuple val(sample_id), path("${sample_id}.raxml.rba"), emit: rba
@@ -26,5 +25,10 @@ process MAKE_PHYLOGENY {
             --bs-metric tbe \
             --tree rand{1} \
             --bs-trees 1000
+
+        mv ${sample_id}.raxml.bestTree ${sample_id}.raxml.bestTree.tre
+        mv ${sample_id}.raxml.bootstraps ${sample_id}.raxml.bootstraps.tre
+        mv ${sample_id}.raxml.reduced.phy ${sample_id}.raxml.reduced.phy.tre
+        mv ${sample_id}.raxml.support ${sample_id}.raxml.support.tre
         """
 }
