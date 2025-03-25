@@ -58,9 +58,9 @@ workflow SPECIES_DELIMITATION {
             .set {ch_reference_phylogeny}
         
         MAKE_PD_MATRIX(ch_reference_phylogeny)
-            .set {ch_reference_pd_phylogeny}
+            .set {ch_reference_pd_matrix}
          
-        CALCULATE_MPD(ch_reference_pd_phylogeny)
+        CALCULATE_MPD(ch_reference_pd_matrix)
             .set {ch_reference_mpd}
         
 }
