@@ -3,7 +3,7 @@ process MAKE_PHYLOGENY {
     publishDir "${params.output}/make-phylogeny", mode: "copy"
 
     input:
-        tuple val(sample_id), path(alignment), path(substitution_model)
+        tuple val(sample_id), path(alignment), val(substitution_model)
     
     output:
         tuple val(sample_id), path("${sample_id}.raxml.bestTree.tre"), emit: best_tree
