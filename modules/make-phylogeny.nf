@@ -28,7 +28,9 @@ process MAKE_PHYLOGENY {
 
         mv ${sample_id}.raxml.bestTree ${sample_id}.raxml.bestTree.tre
         mv ${sample_id}.raxml.bootstraps ${sample_id}.raxml.bootstraps.tre
+        mv ${sample_id}.raxml.log ${sample_id}.raxml.log.txt
         mv ${sample_id}.raxml.reduced.phy ${sample_id}.raxml.reduced.phy.tre
+        mv ${sample_id}.raxml.startTree ${sample_id}.raxml.startTree.tre
         mv ${sample_id}.raxml.support ${sample_id}.raxml.support.tre
         """
 }
