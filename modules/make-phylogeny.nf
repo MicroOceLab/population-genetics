@@ -20,7 +20,7 @@ process MAKE_PHYLOGENY {
             --all \
             --msa ${alignment} \
             --model ${substitution_model} \
-            --prefix ${PWD}/${sample_id} \
+            --prefix \${PWD}/${sample_id} \
             --seed 119318 \
             --bs-metric tbe \
             --tree rand{1} \
