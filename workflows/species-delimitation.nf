@@ -3,6 +3,7 @@ include { FIX_FORMAT                                 } from '../modules/fix-form
 include { MAKE_ALIGNMENT                             } from '../modules/make-alignment'
 include { MAKE_CONSENSUS_SEQUENCE                    } from '../modules/make-consensus-sequence'
 include { COMBINE_CONSENSUS_SEQUENCES                } from '../modules/combine-consensus-sequences'
+include { FIX_FORMAT as FIX_CONSENSUS_FORMAT         } from '../modules/fix-format'
 include { MAKE_ALIGNMENT as MAKE_CONSENSUS_ALIGNMENT } from '../modules/make-alignment'
 include { CALCULATE_SUBSTITUTION_MODEL               } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY                             } from '../modules/make-phylogeny'
@@ -42,8 +43,11 @@ workflow SPECIES_DELIMITATION {
             .reduce("") {sequence_1, sequence_2 ->
                 "$sequence_1 $sequence_2"}))
             .set {ch_combined_reference_consensus_sequences}
+
+        FIX_CONSENSUS_FORMAT(ch_combined_reference_consensus_sequences)
+            .set {ch_formatted_reference_consensus_sequences}
         
-        MAKE_CONSENSUS_ALIGNMENT(ch_combined_reference_consensus_sequences)
+        MAKE_CONSENSUS_ALIGNMENT(ch_formatted_reference_consensus_sequences)
             .set {ch_reference_consensus_alignment}
          
         CALCULATE_SUBSTITUTION_MODEL(ch_reference_consensus_alignment)
