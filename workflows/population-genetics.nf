@@ -3,6 +3,14 @@ if (params.reference && !params_reference.contains(params.reference)) {
     error "ERROR: Invalid reference phylogeny mode (--reference) specified"
 }
 
+
+include { PREPARE_ID as PREPARE_QUERY_ID                                     } from '../modules/prepare-id'
+include { FIX_FORMAT as FIX_QUERY_FORMAT                                     } from '../modules/fix-format'
+include { MAKE_ALIGNMENT as MAKE_QUERY_ALIGNMENT                             } from '../modules/make-alignment'
+include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
+include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
+include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
+
 include { PREPARE_ID as PREPARE_REFERENCE_ID                                     } from '../modules/prepare-id'
 include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                     } from '../modules/fix-format'
 include { MAKE_ALIGNMENT as MAKE_INITIAL_REFERENCE_ALIGNMENT                     } from '../modules/make-alignment'
@@ -21,6 +29,49 @@ include { CALCULATE_MPD                                                         
 
 workflow POPULATION_GENETICS {
     main:
+        Channel.fromPath('./data/query/*.fasta')
+            .set {ch_query_fasta}
+            
+        Channel.fromPath('./data/query/*.fas')
+            .set {ch_query_fas}
+
+        Channel.fromPath('./data/query/*.fna')
+            .set {ch_query_fna}
+
+        Channel.fromPath('./data/query/*.fa')
+            .set {ch_query_fa}
+
+        ch_query_fasta
+            .mix(ch_query_fas, ch_query_fna, ch_query_fa)
+            .set {ch_query_sequences}
+
+        ch_query_sequences
+            .count()
+            .map { query_sequence_count ->
+                if (query_sequence_count == 0) {
+                    error "ERROR: Missing query sequences in './data/query/'"
+                }
+            }
+
+        PREPARE_QUERY_ID(ch_query_sequences)
+            .set {ch_query_sequences_with_id}
+
+        FIX_QUERY_FORMAT(ch_query_sequences_with_id)
+                .set {ch_formatted_query_sequences}
+
+        MAKE_QUERY_ALIGNMENT(ch_formatted_query_sequences)
+            .set {ch_query_alignment}
+
+        MAKE_QUERY_CONSENSUS(ch_query_alignment)
+            .set {ch_query_consensus}
+
+        CALCULATE_QUERY_SUBSTITUTION_MODEL(ch_query_alignment)
+            .set {ch_query_substitution}
+
+        MAKE_QUERY_PHYLOGENY(ch_query_consensus_alignment
+                .join(ch_query_substitution.model))
+                .set {ch_query_phylogeny}
+
         if (params.reference) {
             Channel.fromPath('./data/reference/*.fasta')
                 .set {ch_reference_fasta}
