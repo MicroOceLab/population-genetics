@@ -122,8 +122,8 @@ workflow POPULATION_GENETICS {
 
                 COMBINE_REFERENCE_CONSENSUS(ch_combined_consensus_id
                     .combine(ch_reference_consensus.squashed_sequences
-                    .reduce("") {sequence_1, sequence_2 ->
-                        "$sequence_1 $sequence_2"}))
+                        .reduce("") {sequence_1, sequence_2 ->
+                            "$sequence_1 $sequence_2"}))
                     .set {ch_combined_reference_consensus}
 
                 FIX_REFERENCE_CONSENSUS_FORMAT(ch_combined_reference_consensus)
@@ -137,8 +137,10 @@ workflow POPULATION_GENETICS {
                 .set {ch_appended_id}
 
             MAKE_APPENDED_ALIGNMENT(ch_appended_id
-                .combine(ch_reference_alignment[1])
-                .combine(ch_query_consensus[1]))
+                .combine(ch_reference_alignment
+                    .map {reference_alignment -> reference_alignment[1]})
+                .combine(ch_query_consensus.sequences
+                    .map {query_consensus_sequences -> query_consensus_sequences[1]}))
                 .set {ch_appended_alignment}
             
             CALCULATE_APPENDED_SUBSTITUTION_MODEL(ch_appended_alignment)
