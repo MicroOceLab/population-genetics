@@ -12,15 +12,16 @@ include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } f
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
 
-include { PREPARE_ID as PREPARE_REFERENCE_ID                                     } from '../modules/prepare-id'
-include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                     } from '../modules/fix-format'
-include { MAKE_ALIGNMENT as MAKE_INITIAL_REFERENCE_ALIGNMENT                     } from '../modules/make-alignment'
-include { MAKE_CONSENSUS as MAKE_REFERENCE_CONSENSUS                             } from '../modules/make-consensus'
-include { COMBINE_SEQUENCES as COMBINE_REFERENCE_CONSENSUS                       } from '../modules/combine-sequences'
-include { FIX_FORMAT as FIX_REFERENCE_CONSENSUS_FORMAT                           } from '../modules/fix-format'
-include { MAKE_ALIGNMENT as MAKE_REFERENCE_ALIGNMENT                             } from '../modules/make-alignment'
-include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_REFERENCE_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
-include { MAKE_PHYLOGENY as MAKE_REFERENCE_PHYLOGENY                             } from '../modules/make-phylogeny'
+include { PREPARE_ID as PREPARE_REFERENCE_ID                                    } from '../modules/prepare-id'
+include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                    } from '../modules/fix-format'
+include { MAKE_ALIGNMENT as MAKE_INITIAL_REFERENCE_ALIGNMENT                    } from '../modules/make-alignment'
+include { MAKE_CONSENSUS as MAKE_REFERENCE_CONSENSUS                            } from '../modules/make-consensus'
+include { COMBINE_SEQUENCES as COMBINE_REFERENCE_CONSENSUS                      } from '../modules/combine-sequences'
+include { FIX_FORMAT as FIX_REFERENCE_CONSENSUS_FORMAT                          } from '../modules/fix-format'
+include { MAKE_ALIGNMENT as MAKE_REFERENCE_ALIGNMENT                            } from '../modules/make-alignment'
+include { MAKE_APPENDED_ALIGNMENT                                               } from '../modules/make-appended-alignment'
+include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_APPENDED_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
+include { MAKE_PHYLOGENY as MAKE_APPENDED_PHYLOGENY                             } from '../modules/make-phylogeny'
 
 /*
 include { MAKE_PD_MATRIX                                                         } from '../modules/make-pd-matrix'
@@ -131,13 +132,21 @@ workflow POPULATION_GENETICS {
 
             MAKE_REFERENCE_ALIGNMENT(ch_final_reference_sequences)
                 .set {ch_reference_alignment}
+
+            Channel.of("appended")
+                .set {ch_appended_id}
+
+            MAKE_APPENDED_ALIGNMENT(ch_appended_id
+                .combine(ch_reference_alignment[1])
+                .combine(ch_query_consensus[1]))
+                .set {ch_appended_alignment}
             
-            CALCULATE_REFERENCE_SUBSTITUTION_MODEL(ch_reference_alignment)
-                .set {ch_reference_substitution}
+            CALCULATE_APPENDED_SUBSTITUTION_MODEL(ch_appended_alignment)
+                .set {ch_appended_substitution}
             
-            MAKE_REFERENCE_PHYLOGENY(ch_reference_alignment
-                .join(ch_reference_substitution.model))
-                .set {ch_reference_phylogeny}
+            MAKE_APPENDED_PHYLOGENY(ch_appended_alignment
+                .join(ch_appended_substitution.model))
+                .set {ch_appended_phylogeny}
             
             /*
             MAKE_PD_MATRIX(ch_reference_phylogeny)
