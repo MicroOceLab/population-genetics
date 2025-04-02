@@ -27,9 +27,15 @@ workflow POPULATION_GENETICS {
             
             Channel.fromPath('./data/reference/*.fas')
                 .set {ch_reference_fas}
+
+            Channel.fromPath('./data/reference/*.fna')
+                .set {ch_reference_fna}
+
+            Channel.fromPath('./data/reference/*.fa')
+                .set {ch_reference_fa}
             
             ch_reference_fasta
-                .mix(ch_reference_fas)
+                .mix(ch_reference_fas, ch_reference_fna, ch_reference_fa)
                 .set {ch_reference_sequences}
 
             ch_reference_sequences
