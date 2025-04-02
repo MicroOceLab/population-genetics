@@ -107,9 +107,9 @@ workflow POPULATION_GENETICS {
 
             if (params.reference == "consensus") {
                 MAKE_INITIAL_REFERENCE_ALIGNMENT(ch_formatted_reference_sequences)
-                    .set {ch_reference_alignments}
+                    .set {ch_initial_reference_alignments}
                 
-                MAKE_REFERENCE_CONSENSUS(ch_reference_alignments)
+                MAKE_REFERENCE_CONSENSUS(ch_initial_reference_alignments)
                     .set {ch_reference_consensus}
 
                 Channel.of("combined-consensus")
@@ -126,12 +126,12 @@ workflow POPULATION_GENETICS {
             }
 
             MAKE_REFERENCE_ALIGNMENT(ch_final_reference_sequences)
-                .set {ch_reference_consensus_alignment}
+                .set {ch_reference_alignment}
             
-            CALCULATE_REFERENCE_SUBSTITUTION_MODEL(ch_reference_consensus_alignment)
+            CALCULATE_REFERENCE_SUBSTITUTION_MODEL(ch_reference_alignment)
                 .set {ch_reference_substitution}
             
-            MAKE_REFERENCE_PHYLOGENY(ch_reference_consensus_alignment
+            MAKE_REFERENCE_PHYLOGENY(ch_reference_alignment
                 .join(ch_reference_substitution.model))
                 .set {ch_reference_phylogeny}
             
