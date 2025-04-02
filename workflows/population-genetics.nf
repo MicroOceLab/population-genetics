@@ -1,6 +1,6 @@
 params_reference = ["consensus", "random"]
 if (params.reference && !params_reference.contains(params.reference)) {
-    error "ERROR: Invalid reference phylogeny mode (--reference) specified"
+    error "ERROR: Invalid reference mode (--reference) specified for phylogenetic placement"
 }
 
 include { PREPARE_ID as PREPARE_QUERY_ID                                     } from '../modules/prepare-id'
