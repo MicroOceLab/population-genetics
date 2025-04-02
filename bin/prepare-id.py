@@ -5,8 +5,8 @@ import sys
 
 def main():
     fpath = f"{sys.argv[1]}"
-    sample_id = fpath.split("/")[-1].rsplit(".", 2)[0]
+    id = fpath.split("/")[-1].rsplit(".", 2)[0]
     
-    print(sample_id)
+    print(id)
 
 main()
