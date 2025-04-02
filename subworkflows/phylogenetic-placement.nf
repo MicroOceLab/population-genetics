@@ -1,6 +1,6 @@
 include { PREPARE_ID as PREPARE_REFERENCE_ID                                    } from '../modules/prepare-id'
 include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                    } from '../modules/fix-format'
-include { MAKE_ALIGNMENT as MAKE_INITIAL_REFERENCE_ALIGNMENT                    } from '../modules/make-alignment'
+include { MAKE_ALIGNMENT as MAKE_REFERENCE_SUBALIGNMENT                         } from '../modules/make-alignment'
 include { MAKE_CONSENSUS as MAKE_REFERENCE_CONSENSUS                            } from '../modules/make-consensus'
 include { COMBINE_SEQUENCES as COMBINE_REFERENCE_CONSENSUS                      } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_REFERENCE_CONSENSUS_FORMAT                          } from '../modules/fix-format'
@@ -47,10 +47,10 @@ workflow PHYLOGENETIC_PLACEMENT {
         ch_final_reference_sequences = Channel.empty()
 
         if (params.reference == "consensus") {
-            MAKE_INITIAL_REFERENCE_ALIGNMENT(ch_formatted_reference_sequences)
-                .set {ch_initial_reference_alignments}
+            MAKE_REFERENCE_SUBALIGNMENT(ch_formatted_reference_sequences)
+                .set {ch_reference_subalignments}
                 
-            MAKE_REFERENCE_CONSENSUS(ch_initial_reference_alignments)
+            MAKE_REFERENCE_CONSENSUS(ch_reference_subalignments)
                 .set {ch_reference_consensus}
 
             Channel.of("combined-reference-consensus")
