@@ -11,7 +11,6 @@ process MAKE_PHYLOGENY {
         tuple val(id), path("${id}.raxml.bootstraps.tre"), emit: bootstraps
         tuple val(id), path("${id}.raxml.log.txt"), emit: log
         tuple val(id), path("${id}.raxml.rba"), emit: rba
-        tuple val(id), path("${id}.raxml.reduced.phy.tre"), emit: reduced
         tuple val(id), path("${id}.raxml.startTree.tre"), emit: start_tree
         tuple val(id), path("${id}.raxml.support.tre"), emit: support
 
@@ -31,7 +30,6 @@ process MAKE_PHYLOGENY {
         mv ${id}.raxml.bestTree ${id}.raxml.bestTree.tre
         mv ${id}.raxml.bootstraps ${id}.raxml.bootstraps.tre
         mv ${id}.raxml.log ${id}.raxml.log.txt
-        mv ${id}.raxml.reduced.phy ${id}.raxml.reduced.phy.tre
         mv ${id}.raxml.startTree ${id}.raxml.startTree.tre
         mv ${id}.raxml.support ${id}.raxml.support.tre
         """
