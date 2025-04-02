@@ -68,7 +68,7 @@ workflow POPULATION_GENETICS {
         CALCULATE_QUERY_SUBSTITUTION_MODEL(ch_query_alignment)
             .set {ch_query_substitution}
 
-        MAKE_QUERY_PHYLOGENY(ch_query_consensus_alignment
+        MAKE_QUERY_PHYLOGENY(ch_query_alignment
                 .join(ch_query_substitution.model))
                 .set {ch_query_phylogeny}
 
