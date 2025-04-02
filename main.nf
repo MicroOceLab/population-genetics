@@ -1,6 +1,6 @@
-include { SPECIES_DELIMITATION } from './workflows/species-delimitation'
+include { POPULATION_GENETICS } from './workflows/population-genetics'
 
 workflow {
     main:
-        SPECIES_DELIMITATION()
+        POPULATION_GENETICS()
 }

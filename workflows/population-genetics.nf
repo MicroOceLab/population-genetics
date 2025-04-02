@@ -16,7 +16,7 @@ include { MAKE_PD_MATRIX                             } from '../modules/make-pd-
 include { CALCULATE_MPD                              } from '../modules/calculate-mpd'
 
 
-workflow SPECIES_DELIMITATION {
+workflow POPULATION_GENETICS {
     main:
         if (params.reference == "consensus") {
             Channel.fromPath('./data/*.fasta')
