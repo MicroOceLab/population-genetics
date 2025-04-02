@@ -6,8 +6,7 @@ process MAKE_CONSENSUS {
         tuple val(id), path(alignment)
     
     output:
-        tuple val(id), path("${id}-consensus.fasta"), emit: sequences
-        path("${id}-consensus.fasta"), emit: squashed_sequences
+        tuple val(id), path("${id}-consensus.fasta")
 
     script:
         """
