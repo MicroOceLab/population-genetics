@@ -12,8 +12,11 @@ include { FIX_FORMAT as FIX_REFERENCE_CONSENSUS_FORMAT                          
 include { MAKE_ALIGNMENT as MAKE_REFERENCE_CONSENSUS_ALIGNMENT                   } from '../modules/make-alignment'
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_REFERENCE_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_REFERENCE_PHYLOGENY                             } from '../modules/make-phylogeny'
+
+/*
 include { MAKE_PD_MATRIX                                                         } from '../modules/make-pd-matrix'
 include { CALCULATE_MPD                                                          } from '../modules/calculate-mpd'
+*/
 
 
 workflow POPULATION_GENETICS {
@@ -63,11 +66,13 @@ workflow POPULATION_GENETICS {
                 .join(ch_reference_substitution.model))
                 .set {ch_reference_phylogeny}
             
+            /*
             MAKE_PD_MATRIX(ch_reference_phylogeny)
                 .set {ch_reference_pd_matrix}
             
             CALCULATE_MPD(ch_reference_pd_matrix)
                 .set {ch_reference_mpd}
+            */
         }
         
 }
