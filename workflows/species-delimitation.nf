@@ -1,7 +1,7 @@
 include { PREPARE_ID                                 } from '../modules/prepare-id'
 include { FIX_FORMAT                                 } from '../modules/fix-format'
 include { MAKE_ALIGNMENT                             } from '../modules/make-alignment'
-include { MAKE_CONSENSUS_SEQUENCE                    } from '../modules/make-consensus-sequence'
+include { MAKE_CONSENSUS                             } from '../modules/make-consensus'
 include { COMBINE_SEQUENCES                          } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_CONSENSUS_FORMAT         } from '../modules/fix-format'
 include { MAKE_ALIGNMENT as MAKE_CONSENSUS_ALIGNMENT } from '../modules/make-alignment'
@@ -32,7 +32,7 @@ workflow SPECIES_DELIMITATION {
         MAKE_ALIGNMENT(ch_formatted_reference_sequences)
             .set {ch_reference_alignments}
          
-        MAKE_CONSENSUS_SEQUENCE(ch_reference_alignments)
+        MAKE_CONSENSUS(ch_reference_alignments)
             .set {ch_reference_consensus}
 
         Channel.of("combined-consensus")
@@ -42,12 +42,12 @@ workflow SPECIES_DELIMITATION {
             .combine(ch_reference_consensus.squashed_sequences
             .reduce("") {sequence_1, sequence_2 ->
                 "$sequence_1 $sequence_2"}))
-            .set {ch_combined_reference_consensus_sequences}
+            .set {ch_combined_reference_consensus}
 
-        FIX_CONSENSUS_FORMAT(ch_combined_reference_consensus_sequences)
-            .set {ch_formatted_reference_consensus_sequences}
+        FIX_CONSENSUS_FORMAT(ch_combined_reference_consensus)
+            .set {ch_formatted_reference_consensus}
         
-        MAKE_CONSENSUS_ALIGNMENT(ch_formatted_reference_consensus_sequences)
+        MAKE_CONSENSUS_ALIGNMENT(ch_formatted_reference_consensus)
             .set {ch_reference_consensus_alignment}
          
         CALCULATE_SUBSTITUTION_MODEL(ch_reference_consensus_alignment)

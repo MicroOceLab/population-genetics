@@ -1,6 +1,6 @@
-process MAKE_CONSENSUS_SEQUENCE {
+process MAKE_CONSENSUS {
     container "quay.io/biocontainers/emboss:5.0.0--h362c646_6"
-    publishDir "${params.output}/make-consensus-sequence", mode: "copy"
+    publishDir "${params.output}/make-consensus", mode: "copy"
 
     input:
         tuple val(id), path(alignment)
