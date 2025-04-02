@@ -1,2 +1,2 @@
-# species-delimitation
-Phylogenetics-based pipeline for species delimitation using target markers
+# population-genetics
+Bioinformatics pipeline for studying the phylogeny and haplotype diversity of sequenced markers
