@@ -123,8 +123,7 @@ workflow POPULATION_GENETICS {
                 COMBINE_REFERENCE_CONSENSUS(ch_combined_reference_consensus_id
                     .combine(ch_reference_consensus
                         .map {reference_consensus -> reference_consensus[1]}
-                        .reduce("") {path_1, path_2 ->
-                            "$path_1 $path_2"}))
+                        .reduce("") {path_1, path_2 -> "$path_1 $path_2"}))
                     .set {ch_combined_reference_consensus}
 
                 FIX_REFERENCE_CONSENSUS_FORMAT(ch_combined_reference_consensus)
