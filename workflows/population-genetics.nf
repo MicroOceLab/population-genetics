@@ -22,15 +22,23 @@ include { CALCULATE_MPD                                                         
 workflow POPULATION_GENETICS {
     main:
         if (params.reference) {
-            Channel.fromPath('./data/*.fasta')
+            Channel.fromPath('./data/reference/*.fasta')
                 .set {ch_reference_fasta}
             
-            Channel.fromPath('./data/*.fas')
+            Channel.fromPath('./data/reference/*.fas')
                 .set {ch_reference_fas}
             
             ch_reference_fasta
                 .mix(ch_reference_fas)
                 .set {ch_reference_sequences}
+
+            ch_reference_sequences
+                .count()
+                .map { reference_sequence_count ->
+                    if (reference_sequence_count == 0) {
+                        error "ERROR: Missing reference sequences in './data/reference/'"
+                    }
+                }
 
             PREPARE_REFERENCE_ID(ch_reference_sequences)
                 .set {ch_reference_sequences_with_id}

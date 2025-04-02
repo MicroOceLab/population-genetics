@@ -1,6 +1,10 @@
 mkdir -p data
 mkdir -p results
 
+cd data
+mkdir -p reference
+cd ..
+
 docker build --file assets/python.Dockerfile --tag MicroOceLab/python:1.0 .
 docker pull quay.io/biocontainers/mafft:7.221--0
 docker pull quay.io/biocontainers/emboss:5.0.0--h362c646_6
