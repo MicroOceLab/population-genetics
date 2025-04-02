@@ -2,7 +2,7 @@ include { PREPARE_ID                                 } from '../modules/prepare-
 include { FIX_FORMAT                                 } from '../modules/fix-format'
 include { MAKE_ALIGNMENT                             } from '../modules/make-alignment'
 include { MAKE_CONSENSUS_SEQUENCE                    } from '../modules/make-consensus-sequence'
-include { COMBINE_CONSENSUS_SEQUENCES                } from '../modules/combine-consensus-sequences'
+include { COMBINE_SEQUENCES                          } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_CONSENSUS_FORMAT         } from '../modules/fix-format'
 include { MAKE_ALIGNMENT as MAKE_CONSENSUS_ALIGNMENT } from '../modules/make-alignment'
 include { CALCULATE_SUBSTITUTION_MODEL               } from '../modules/calculate-substitution-model'
@@ -38,7 +38,7 @@ workflow SPECIES_DELIMITATION {
         Channel.of("combined-consensus")
             .set {ch_combined_consensus_id}
 
-        COMBINE_CONSENSUS_SEQUENCES(ch_combined_consensus_id
+        COMBINE_SEQUENCES(ch_combined_consensus_id
             .combine(ch_reference_consensus.squashed_sequences
             .reduce("") {sequence_1, sequence_2 ->
                 "$sequence_1 $sequence_2"}))
