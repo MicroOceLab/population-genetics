@@ -14,7 +14,6 @@ include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } f
 
 include { PREPARE_ID as PREPARE_REFERENCE_ID                                     } from '../modules/prepare-id'
 include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                     } from '../modules/fix-format'
-include { REMOVE_DUPLICATES as REMOVE_REFERENCE_DUPLICATES                       } from '../modules/remove-duplicates'
 include { MAKE_ALIGNMENT as MAKE_INITIAL_REFERENCE_ALIGNMENT                     } from '../modules/make-alignment'
 include { MAKE_CONSENSUS as MAKE_REFERENCE_CONSENSUS                             } from '../modules/make-consensus'
 include { COMBINE_SEQUENCES as COMBINE_REFERENCE_CONSENSUS                       } from '../modules/combine-sequences'
@@ -107,14 +106,11 @@ workflow POPULATION_GENETICS {
             
             FIX_REFERENCE_FORMAT(ch_reference_sequences_with_id)
                 .set {ch_formatted_reference_sequences}
-            
-            REMOVE_REFERENCE_DUPLICATES(ch_formatted_reference_sequences)
-                .set {ch_unique_reference_sequences}
 
             ch_final_reference_sequences = Channel.empty()
 
             if (params.reference == "consensus") {
-                MAKE_INITIAL_REFERENCE_ALIGNMENT(ch_unique_reference_sequences)
+                MAKE_INITIAL_REFERENCE_ALIGNMENT(ch_formatted_reference_sequences)
                     .set {ch_initial_reference_alignments}
                 
                 MAKE_REFERENCE_CONSENSUS(ch_initial_reference_alignments)
