@@ -1,5 +1,5 @@
 process FIX_FORMAT {
-    container "MicroOceLab/python:1.0"
+    container "quay.io/biocontainers/seqkit:2.10.0--h9ee0642_0"
     publishDir "${params.output}/fix-format", mode: "copy"
 
     input:
@@ -11,6 +11,7 @@ process FIX_FORMAT {
     script:
         """
         fix-gaps.sh ${sequences} ${id}-ungapped.fasta
-        fix-headers.sh ${id}-ungapped.fasta ${id}-formatted.fasta
+        fix-headers.sh ${id}-ungapped.fasta ${id}-header-fixed.fasta
+        seqkit seq ${id}-header-fixed.fasta -o ${id}-formatted.fasta
         """
 }
