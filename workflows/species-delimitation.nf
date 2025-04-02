@@ -1,3 +1,8 @@
+params_reference = ["consensus", "random"]
+if (params.reference && !params_reference.contains(params.reference)) {
+    error "ERROR: Invalid reference phylogeny mode (--reference) specified"
+}
+
 include { PREPARE_ID                                 } from '../modules/prepare-id'
 include { FIX_FORMAT                                 } from '../modules/fix-format'
 include { MAKE_ALIGNMENT                             } from '../modules/make-alignment'
@@ -13,54 +18,56 @@ include { CALCULATE_MPD                              } from '../modules/calculat
 
 workflow SPECIES_DELIMITATION {
     main:
-        Channel.fromPath('./data/*.fasta')
-            .set {ch_reference_fasta}
-        
-        Channel.fromPath('./data/*.fas')
-            .set {ch_reference_fas}
-        
-        ch_reference_fasta
-            .mix(ch_reference_fas)
-            .set {ch_reference_sequences}
+        if (params.reference == "consensus") {
+            Channel.fromPath('./data/*.fasta')
+                .set {ch_reference_fasta}
+            
+            Channel.fromPath('./data/*.fas')
+                .set {ch_reference_fas}
+            
+            ch_reference_fasta
+                .mix(ch_reference_fas)
+                .set {ch_reference_sequences}
 
-        PREPARE_ID(ch_reference_sequences)
-            .set {ch_reference_sequences_with_id}
-        
-        FIX_FORMAT(ch_reference_sequences_with_id)
-            .set {ch_formatted_reference_sequences}
-         
-        MAKE_ALIGNMENT(ch_formatted_reference_sequences)
-            .set {ch_reference_alignments}
-         
-        MAKE_CONSENSUS(ch_reference_alignments)
-            .set {ch_reference_consensus}
+            PREPARE_ID(ch_reference_sequences)
+                .set {ch_reference_sequences_with_id}
+            
+            FIX_FORMAT(ch_reference_sequences_with_id)
+                .set {ch_formatted_reference_sequences}
+            
+            MAKE_ALIGNMENT(ch_formatted_reference_sequences)
+                .set {ch_reference_alignments}
+            
+            MAKE_CONSENSUS(ch_reference_alignments)
+                .set {ch_reference_consensus}
 
-        Channel.of("combined-consensus")
-            .set {ch_combined_consensus_id}
+            Channel.of("combined-consensus")
+                .set {ch_combined_consensus_id}
 
-        COMBINE_SEQUENCES(ch_combined_consensus_id
-            .combine(ch_reference_consensus.squashed_sequences
-            .reduce("") {sequence_1, sequence_2 ->
-                "$sequence_1 $sequence_2"}))
-            .set {ch_combined_reference_consensus}
+            COMBINE_SEQUENCES(ch_combined_consensus_id
+                .combine(ch_reference_consensus.squashed_sequences
+                .reduce("") {sequence_1, sequence_2 ->
+                    "$sequence_1 $sequence_2"}))
+                .set {ch_combined_reference_consensus}
 
-        FIX_CONSENSUS_FORMAT(ch_combined_reference_consensus)
-            .set {ch_formatted_reference_consensus}
-        
-        MAKE_CONSENSUS_ALIGNMENT(ch_formatted_reference_consensus)
-            .set {ch_reference_consensus_alignment}
-         
-        CALCULATE_SUBSTITUTION_MODEL(ch_reference_consensus_alignment)
-            .set {ch_reference_substitution}
-        
-        MAKE_PHYLOGENY(ch_reference_consensus_alignment
-            .join(ch_reference_substitution.model))
-            .set {ch_reference_phylogeny}
-        
-        MAKE_PD_MATRIX(ch_reference_phylogeny)
-            .set {ch_reference_pd_matrix}
-         
-        CALCULATE_MPD(ch_reference_pd_matrix)
-            .set {ch_reference_mpd}
+            FIX_CONSENSUS_FORMAT(ch_combined_reference_consensus)
+                .set {ch_formatted_reference_consensus}
+            
+            MAKE_CONSENSUS_ALIGNMENT(ch_formatted_reference_consensus)
+                .set {ch_reference_consensus_alignment}
+            
+            CALCULATE_SUBSTITUTION_MODEL(ch_reference_consensus_alignment)
+                .set {ch_reference_substitution}
+            
+            MAKE_PHYLOGENY(ch_reference_consensus_alignment
+                .join(ch_reference_substitution.model))
+                .set {ch_reference_phylogeny}
+            
+            MAKE_PD_MATRIX(ch_reference_phylogeny)
+                .set {ch_reference_pd_matrix}
+            
+            CALCULATE_MPD(ch_reference_pd_matrix)
+                .set {ch_reference_mpd}
+        }
         
 }
