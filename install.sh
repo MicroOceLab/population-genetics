@@ -2,6 +2,7 @@ mkdir -p data
 mkdir -p results
 
 cd data
+mkdir -p query
 mkdir -p reference
 cd ..
 
