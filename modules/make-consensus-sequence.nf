@@ -3,18 +3,18 @@ process MAKE_CONSENSUS_SEQUENCE {
     publishDir "${params.output}/make-consensus-sequence", mode: "copy"
 
     input:
-        tuple val(sample_id), path(alignment)
+        tuple val(id), path(alignment)
     
     output:
-        tuple val(sample_id), path("${sample_id}-consensus.fasta"), emit: sequences
-        path("${sample_id}-consensus.fasta"), emit: squashed_sequences
+        tuple val(id), path("${id}-consensus.fasta"), emit: sequences
+        path("${id}-consensus.fasta"), emit: squashed_sequences
 
     script:
         """
         cons \
             -sequence ${alignment} \
-            -outseq ${sample_id}-consensus.fasta \
-            -name ${sample_id}-consensus \
+            -outseq ${id}-consensus.fasta \
+            -name ${id}-consensus \
             -plurality 0.2
         """
 }

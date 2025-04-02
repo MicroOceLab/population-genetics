@@ -4,16 +4,16 @@ process MAKE_PHYLOGENY {
     cache "deep"
 
     input:
-        tuple val(sample_id), path(alignment), val(substitution_model)
+        tuple val(id), path(alignment), val(substitution_model)
     
     output:
-        tuple val(sample_id), path("${sample_id}.raxml.bestTree.tre"), emit: best_tree
-        tuple val(sample_id), path("${sample_id}.raxml.bootstraps.tre"), emit: bootstraps
-        tuple val(sample_id), path("${sample_id}.raxml.log.txt"), emit: log
-        tuple val(sample_id), path("${sample_id}.raxml.rba"), emit: rba
-        tuple val(sample_id), path("${sample_id}.raxml.reduced.phy.tre"), emit: reduced
-        tuple val(sample_id), path("${sample_id}.raxml.startTree.tre"), emit: start_tree
-        tuple val(sample_id), path("${sample_id}.raxml.support.tre"), emit: support
+        tuple val(id), path("${id}.raxml.bestTree.tre"), emit: best_tree
+        tuple val(id), path("${id}.raxml.bootstraps.tre"), emit: bootstraps
+        tuple val(id), path("${id}.raxml.log.txt"), emit: log
+        tuple val(id), path("${id}.raxml.rba"), emit: rba
+        tuple val(id), path("${id}.raxml.reduced.phy.tre"), emit: reduced
+        tuple val(id), path("${id}.raxml.startTree.tre"), emit: start_tree
+        tuple val(id), path("${id}.raxml.support.tre"), emit: support
 
     script:
         """
@@ -21,17 +21,17 @@ process MAKE_PHYLOGENY {
             --all \
             --msa ${alignment} \
             --model ${substitution_model} \
-            --prefix \${PWD}/${sample_id} \
+            --prefix \${PWD}/${id} \
             --seed 119318 \
             --bs-metric tbe \
             --tree rand{1} \
             --bs-trees 1000
 
-        mv ${sample_id}.raxml.bestTree ${sample_id}.raxml.bestTree.tre
-        mv ${sample_id}.raxml.bootstraps ${sample_id}.raxml.bootstraps.tre
-        mv ${sample_id}.raxml.log ${sample_id}.raxml.log.txt
-        mv ${sample_id}.raxml.reduced.phy ${sample_id}.raxml.reduced.phy.tre
-        mv ${sample_id}.raxml.startTree ${sample_id}.raxml.startTree.tre
-        mv ${sample_id}.raxml.support ${sample_id}.raxml.support.tre
+        mv ${id}.raxml.bestTree ${id}.raxml.bestTree.tre
+        mv ${id}.raxml.bootstraps ${id}.raxml.bootstraps.tre
+        mv ${id}.raxml.log ${id}.raxml.log.txt
+        mv ${id}.raxml.reduced.phy ${id}.raxml.reduced.phy.tre
+        mv ${id}.raxml.startTree ${id}.raxml.startTree.tre
+        mv ${id}.raxml.support ${id}.raxml.support.tre
         """
 }

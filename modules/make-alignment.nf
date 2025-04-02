@@ -3,13 +3,13 @@ process MAKE_ALIGNMENT {
     publishDir "${params.output}/make-alignment", mode: "copy"
 
     input:
-        tuple val(sample_id), path(formatted_sequences)
+        tuple val(id), path(formatted_sequences)
     
     output:
-        tuple val(sample_id), path("${sample_id}-alignment.fasta")
+        tuple val(id), path("${id}-alignment.fasta")
 
     script:
         """
-        mafft ${formatted_sequences} > ${sample_id}-alignment.fasta
+        mafft ${formatted_sequences} > ${id}-alignment.fasta
         """
 }

@@ -4,13 +4,13 @@ process COMBINE_CONSENSUS_SEQUENCES {
     cache "deep"
 
     input:
-        tuple val(sample_id), val(consensus_sequences)
+        tuple val(id), val(consensus_sequences)
     
     output:
-        tuple val(sample_id), path("${sample_id}.fasta")
+        tuple val(id), path("${id}.fasta")
 
     script:
         """
-        cat ${consensus_sequences} >> ${sample_id}.fasta
+        cat ${consensus_sequences} >> ${id}.fasta
         """
 }

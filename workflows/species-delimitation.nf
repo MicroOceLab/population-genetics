@@ -1,4 +1,4 @@
-include { PREPARE_SAMPLE_ID                          } from '../modules/prepare-sample-id'
+include { PREPARE_ID                                 } from '../modules/prepare-id'
 include { FIX_FORMAT                                 } from '../modules/fix-format'
 include { MAKE_ALIGNMENT                             } from '../modules/make-alignment'
 include { MAKE_CONSENSUS_SEQUENCE                    } from '../modules/make-consensus-sequence'
@@ -23,7 +23,7 @@ workflow SPECIES_DELIMITATION {
             .mix(ch_reference_fas)
             .set {ch_reference_sequences}
 
-        PREPARE_SAMPLE_ID(ch_reference_sequences)
+        PREPARE_ID(ch_reference_sequences)
             .set {ch_reference_sequences_with_id}
         
         FIX_FORMAT(ch_reference_sequences_with_id)
