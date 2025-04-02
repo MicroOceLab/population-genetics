@@ -25,7 +25,8 @@ process MAKE_PHYLOGENY {
             --seed 119318 \
             --bs-metric tbe \
             --tree rand{1} \
-            --bs-trees 1000
+            --bs-trees 1000 \
+            --force perf_threads
 
         mv ${id}.raxml.bestTree ${id}.raxml.bestTree.tre
         mv ${id}.raxml.bootstraps ${id}.raxml.bootstraps.tre
