@@ -117,10 +117,10 @@ workflow POPULATION_GENETICS {
                 MAKE_REFERENCE_CONSENSUS(ch_initial_reference_alignments)
                     .set {ch_reference_consensus}
 
-                Channel.of("combined-consensus")
-                    .set {ch_combined_consensus_id}
+                Channel.of("combined-reference-consensus")
+                    .set {ch_combined_reference_consensus_id}
 
-                COMBINE_REFERENCE_CONSENSUS(ch_combined_consensus_id
+                COMBINE_REFERENCE_CONSENSUS(ch_combined_reference_consensus_id
                     .combine(ch_reference_consensus
                         .map {reference_consensus -> reference_consensus[1]}
                         .reduce("") {path_1, path_2 ->
