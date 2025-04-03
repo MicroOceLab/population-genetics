@@ -1,15 +1,22 @@
+params_query = ["all", "all-consensus", "consensus"]
+if (!params.query) {
+    error "ERROR: Missing query mode (--query) for main workflow"
+} else if (params.query && !params_query.contains(params.query)) {
+    error "ERROR: Invalid query mode (--query) specified for POPULATION_GENETICS workflow"
+}
+
 params_reference = ["consensus", "random"]
 if (params.reference && !params_reference.contains(params.reference)) {
-    error "ERROR: Invalid reference mode (--reference) specified for phylogenetic placement"
+    error "ERROR: Invalid reference mode (--reference) specified for PHYLOGENETIC_PLACEMENT subworkflow"
 }
 
 include { PREPARE_ID as PREPARE_QUERY_ID                                     } from '../modules/prepare-id'
 include { FIX_FORMAT as FIX_QUERY_FORMAT                                     } from '../modules/fix-format'
 include { REMOVE_DUPLICATES as REMOVE_QUERY_DUPLICATES                       } from '../modules/remove-duplicates'
 include { MAKE_ALIGNMENT as MAKE_QUERY_ALIGNMENT                             } from '../modules/make-alignment'
-include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
+include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
 
 include { PHYLOGENETIC_PLACEMENT } from '../subworkflows/phylogenetic-placement'
 
@@ -56,15 +63,29 @@ workflow POPULATION_GENETICS {
         MAKE_QUERY_ALIGNMENT(ch_unique_query_sequences)
             .set {ch_query_alignment}
 
-        MAKE_QUERY_CONSENSUS(ch_query_alignment)
-            .set {ch_query_consensus}
-
         CALCULATE_QUERY_SUBSTITUTION_MODEL(ch_query_alignment)
             .set {ch_query_substitution}
 
         MAKE_QUERY_PHYLOGENY(ch_query_alignment
                 .join(ch_query_substitution.model))
                 .set {ch_query_phylogeny}
+
+        ch_final_query_sequences = Channel.empty()
+
+        if (params.query == "consensus") {
+            MAKE_QUERY_CONSENSUS(ch_query_alignment)
+                .set {ch_query_consensus}
+
+            // combine consensus sequences into one file
+            // set that file as the final query sequences
+        } else if (params.query == "all-consensus") {
+            // combine all 
+            // make consensus
+            // set that file as the final query sequences
+        } else if (params.query == "all") {
+            // combine all
+            // set that file as the final query sequences
+        }
 
         if (params.reference) {
             PHYLOGENETIC_PLACEMENT(ch_query_consensus)
