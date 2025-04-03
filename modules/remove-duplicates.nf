@@ -1,4 +1,5 @@
 process REMOVE_DUPLICATES {
+    cpus 1
     container "quay.io/biocontainers/seqkit:2.10.0--h9ee0642_0"
     publishDir "${params.output}/remove-duplicates", mode: "copy"
 

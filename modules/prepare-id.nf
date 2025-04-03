@@ -1,4 +1,5 @@
 process PREPARE_ID {
+    cpus 1
     container "MicroOceLab/python:1.0"
 
     input:
