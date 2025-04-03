@@ -12,6 +12,7 @@ if (params.reference && !params_reference.contains(params.reference)) {
 
 include { PREPARE_ID as PREPARE_QUERY_ID                                     } from '../modules/prepare-id'
 include { FIX_FORMAT as FIX_QUERY_FORMAT                                     } from '../modules/fix-format'
+include { COMBINE_SEQUENCES as COMBINE_QUERY_SEQUENCES                       } from '../modules/combine-sequences'
 include { REMOVE_DUPLICATES as REMOVE_QUERY_DUPLICATES                       } from '../modules/remove-duplicates'
 include { MAKE_ALIGNMENT as MAKE_QUERY_ALIGNMENT                             } from '../modules/make-alignment'
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
@@ -51,8 +52,17 @@ workflow POPULATION_GENETICS {
 
         FIX_QUERY_FORMAT(ch_query_sequences_with_id)
             .set {ch_formatted_query_sequences}
+
+        Channel.of("combined-query")
+            .set {ch_combined_query_id}
+
+        COMBINE_QUERY_SEQUENCES(ch_combined_query_id
+            .combine(ch_formatted_query_sequences
+                .map {query_sequences -> query_sequences[1]}
+                .reduce("") {path_1, path_2 -> "$path_1 $path_2"}))
+            .set {ch_combined_query_sequences}
         
-        REMOVE_QUERY_DUPLICATES(ch_formatted_query_sequences)
+        REMOVE_QUERY_DUPLICATES(ch_combined_query_sequences)
             .set {ch_unique_query_sequences}
 
         MAKE_QUERY_ALIGNMENT(ch_unique_query_sequences)
