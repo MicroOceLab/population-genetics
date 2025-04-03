@@ -20,11 +20,6 @@ include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } f
 
 include { PHYLOGENETIC_PLACEMENT } from '../subworkflows/phylogenetic-placement'
 
-/*
-include { MAKE_PD_MATRIX                                                         } from '../modules/make-pd-matrix'
-include { CALCULATE_MPD                                                          } from '../modules/calculate-mpd'
-*/
-
 workflow POPULATION_GENETICS {
     main:
         Channel.fromPath('./data/query/*.fasta')
@@ -89,13 +84,5 @@ workflow POPULATION_GENETICS {
 
         if (params.reference) {
             PHYLOGENETIC_PLACEMENT(ch_query_consensus)
-
-            /*
-            MAKE_PD_MATRIX(ch_reference_phylogeny)
-                .set {ch_reference_pd_matrix}
-            
-            CALCULATE_MPD(ch_reference_pd_matrix)
-                .set {ch_reference_mpd}
-            */
         }
 }
