@@ -1,6 +1,7 @@
 params_query = ["all", "all-consensus", "consensus"]
 if (!params.query) {
     error "ERROR: Missing query mode (--query) for main workflow"
+    
 } else if (params.query && !params_query.contains(params.query)) {
     error "ERROR: Invalid query mode (--query) specified for POPULATION_GENETICS workflow"
 }
@@ -18,6 +19,8 @@ include { MAKE_ALIGNMENT as MAKE_QUERY_ALIGNMENT                             } f
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
 include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
+include { COMBINE_SEQUENCES as COMBINE_QUERY_CONSENSUS                       } from '../modules/combine-sequences'
+include { FIX_FORMAT as FIX_QUERY_CONSENSUS_FORMAT                           } from '../modules/fix-format'
 
 include { PHYLOGENETIC_PLACEMENT } from '../subworkflows/phylogenetic-placement'
 
@@ -81,8 +84,18 @@ workflow POPULATION_GENETICS {
             MAKE_QUERY_CONSENSUS(ch_query_alignment)
                 .set {ch_query_consensus}
 
-            // combine consensus sequences into one file
-            // set that file as the final query sequences
+            Channel.of("combined-query-consensus")
+                .set {ch_combined_query_consensus_id}
+
+            COMBINE_QUERY_CONSENSUS(ch_combined_query_consensus_id
+                .combine(ch_query_consensus
+                    .map {query_consensus -> query_consensus[1]}
+                    .reduce("") {path_1, path_2 -> "$path_1 $path_2"}))
+                .set {ch_combined_query_consensus}
+            
+            FIX_QUERY_CONSENSUS_FORMAT(ch_combined_query_consensus)
+                .set {ch_final_query_sequences}
+
         } else if (params.query == "all-consensus") {
             // combine all 
             // make consensus
