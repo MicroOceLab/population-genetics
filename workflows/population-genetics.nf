@@ -1,3 +1,4 @@
+// Error checks
 params_query = ["all", "all-consensus", "consensus"]
 if (!params.query) {
     error "ERROR: Missing query mode (--query) for main workflow"
@@ -11,6 +12,8 @@ if (params.reference && !params_reference.contains(params.reference)) {
     error "ERROR: Invalid reference mode (--reference) specified for PHYLOGENETIC_PLACEMENT subworkflow"
 }
 
+
+// Default module imports
 include { PREPARE_ID as PREPARE_QUERY_ID                                     } from '../modules/prepare-id'
 include { FIX_FORMAT as FIX_QUERY_FORMAT                                     } from '../modules/fix-format'
 include { COMBINE_SEQUENCES as COMBINE_QUERY_SEQUENCES                       } from '../modules/combine-sequences'
@@ -20,11 +23,14 @@ include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } f
 include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
 include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
 
+// Module imports for params.query: 'consensus' or 'all-consensus'
 include { MAKE_ALIGNMENT as MAKE_QUERY_SUBALIGNMENT                          } from '../modules/make-alignment'
 include { COMBINE_SEQUENCES as COMBINE_QUERY_CONSENSUS                       } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_QUERY_CONSENSUS_FORMAT                           } from '../modules/fix-format'
 
+// Default subworkflow import
 include { PHYLOGENETIC_PLACEMENT } from '../subworkflows/phylogenetic-placement'
+
 
 workflow POPULATION_GENETICS {
     main:

@@ -1,19 +1,21 @@
+// Default module imports
 include { PREPARE_ID as PREPARE_REFERENCE_ID                                    } from '../modules/prepare-id'
 include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                    } from '../modules/fix-format'
+include { MAKE_ALIGNMENT as MAKE_REFERENCE_ALIGNMENT                            } from '../modules/make-alignment'
+include { MAKE_APPENDED_ALIGNMENT                                               } from '../modules/make-appended-alignment'
+include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_APPENDED_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
+include { MAKE_PHYLOGENY as MAKE_APPENDED_PHYLOGENY                             } from '../modules/make-phylogeny'
 
+// Module imports for params.reference: 'consensus'
 include { MAKE_ALIGNMENT as MAKE_REFERENCE_SUBALIGNMENT                         } from '../modules/make-alignment'
 include { MAKE_CONSENSUS as MAKE_REFERENCE_CONSENSUS                            } from '../modules/make-consensus'
 include { COMBINE_SEQUENCES as COMBINE_REFERENCE_CONSENSUS                      } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_REFERENCE_CONSENSUS_FORMAT                          } from '../modules/fix-format'
 
+// Module imports for params.reference: 'ranodom'
 include { GET_RANDOM_SEQUENCES as GET_RANDOM_REFERENCES                         } from '../modules/get-random-sequences'
 include { COMBINE_SEQUENCES as COMBINE_REFERENCE_SEQUENCES                      } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_REFERENCE_SEQUENCES_FORMAT                          } from '../modules/fix-format'
-
-include { MAKE_ALIGNMENT as MAKE_REFERENCE_ALIGNMENT                            } from '../modules/make-alignment'
-include { MAKE_APPENDED_ALIGNMENT                                               } from '../modules/make-appended-alignment'
-include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_APPENDED_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
-include { MAKE_PHYLOGENY as MAKE_APPENDED_PHYLOGENY                             } from '../modules/make-phylogeny'
 
 
 workflow PHYLOGENETIC_PLACEMENT {
