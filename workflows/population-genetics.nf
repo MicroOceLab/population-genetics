@@ -19,6 +19,7 @@ include { MAKE_ALIGNMENT as MAKE_QUERY_ALIGNMENT                             } f
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
 include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
+include { MAKE_ALIGNMENT as MAKE_QUERY_SUBALIGNMENT                          } from '../modules/make-alignment'
 include { COMBINE_SEQUENCES as COMBINE_QUERY_CONSENSUS                       } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_QUERY_CONSENSUS_FORMAT                           } from '../modules/fix-format'
 
@@ -81,7 +82,10 @@ workflow POPULATION_GENETICS {
         ch_final_query_sequences = Channel.empty()
 
         if (params.query == "consensus") {
-            MAKE_QUERY_CONSENSUS(ch_query_alignment)
+            MAKE_QUERY_SUBALIGNMENT(ch_formatted_query_sequences)
+                .set {ch_query_subalignments}
+
+            MAKE_QUERY_CONSENSUS(ch_query_subalignments)
                 .set {ch_query_consensus}
 
             Channel.of("combined-query-consensus")
