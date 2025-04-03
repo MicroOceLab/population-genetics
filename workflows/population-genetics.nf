@@ -101,9 +101,12 @@ workflow POPULATION_GENETICS {
                 .set {ch_final_query_sequences}
 
         } else if (params.query == "all-consensus") {
-            // combine all 
-            // make consensus
-            // set that file as the final query sequences
+            MAKE_QUERY_CONSENSUS(ch_query_alignment)
+                .set {ch_query_consensus}
+
+            FIX_QUERY_CONSENSUS_FORMAT(ch_query_consensus)
+                .set {ch_final_query_sequences}
+                
         } else if (params.query == "all") {
             // combine all
             // set that file as the final query sequences
