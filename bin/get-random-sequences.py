@@ -16,7 +16,7 @@ def main():
         input_fasta.append(entry)
         count += 1
     
-    indices = list(0, count)
+    indices = list(range(0, count))
     random.shuffle(indices)
 
     output_fasta = []
