@@ -75,7 +75,7 @@ workflow PHYLOGENETIC_PLACEMENT {
                 .set {ch_final_reference_sequences}
 
         } else if (params.reference == "random") {
-            GET_RANDOM_SEQUENCES(ch_formatted_reference_sequences)
+            GET_RANDOM_REFERENCES(ch_formatted_reference_sequences)
                 .set {ch_random_reference_sequences}
 
             Channel.of("combined-reference-sequences")
