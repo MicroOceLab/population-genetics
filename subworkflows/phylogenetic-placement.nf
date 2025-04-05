@@ -23,16 +23,16 @@ workflow PHYLOGENETIC_PLACEMENT {
         ch_query_consensus
 
     main:
-        Channel.fromPath('./data/reference/*.fasta')
+        Channel.fromPath("${params.data}/${params.reference_dir}/*.fasta")
             .set {ch_reference_fasta}
         
-        Channel.fromPath('./data/reference/*.fas')
+        Channel.fromPath("${params.data}/${params.reference_dir}/*.fas")
             .set {ch_reference_fas}
             
-        Channel.fromPath('./data/reference/*.fna')
+        Channel.fromPath("${params.data}/${params.reference_dir}/*.fna")
             .set {ch_reference_fna}
 
-        Channel.fromPath('./data/reference/*.fa')
+        Channel.fromPath("${params.data}/${params.reference_dir}/*.fa")
             .set {ch_reference_fa}
             
         ch_reference_fasta
@@ -43,7 +43,7 @@ workflow PHYLOGENETIC_PLACEMENT {
             .count()
             .map { reference_sequence_count ->
                 if (reference_sequence_count == 0) {
-                    error "ERROR: Missing reference sequences in './data/reference/'"
+                    error "ERROR: Missing reference sequences in '${params.data}/${params.reference_dir}/'"
                 }
             }
 

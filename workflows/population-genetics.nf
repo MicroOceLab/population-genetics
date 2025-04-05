@@ -34,16 +34,16 @@ include { PHYLOGENETIC_PLACEMENT } from '../subworkflows/phylogenetic-placement'
 
 workflow POPULATION_GENETICS {
     main:
-        Channel.fromPath("${params.data}/*.fasta")
+        Channel.fromPath("${params.data}/${params.query_dir}/*.fasta")
             .set {ch_query_fasta}
             
-        Channel.fromPath("${params.data}/*.fas")
+        Channel.fromPath("${params.data}/${params.query_dir}/*.fas")
             .set {ch_query_fas}
 
-        Channel.fromPath("${params.data}/*.fna")
+        Channel.fromPath("${params.data}/${params.query_dir}/*.fna")
             .set {ch_query_fna}
 
-        Channel.fromPath("${params.data}/*.fa")
+        Channel.fromPath("${params.data}/${params.query_dir}/*.fa")
             .set {ch_query_fa}
 
         ch_query_fasta
@@ -54,7 +54,7 @@ workflow POPULATION_GENETICS {
             .count()
             .map { query_sequence_count ->
                 if (query_sequence_count == 0) {
-                    error "ERROR: Missing query sequences in '${params.data}/'"
+                    error "ERROR: Missing query sequences in '${params.data}/${params.query_dir}/'"
                 }
             }
 
