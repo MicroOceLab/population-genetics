@@ -1,7 +1,7 @@
 process MAKE_APPENDED_ALIGNMENT {
     cpus 8
     container "quay.io/biocontainers/mafft:7.221--0"
-    publishDir "${params.output}/make-appended-alignment", mode: "copy"
+    publishDir "${params.results}/make-appended-alignment", mode: "copy"
 
     input:
         tuple val(id), path(alignment), path(sequences)

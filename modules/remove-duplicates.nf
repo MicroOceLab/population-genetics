@@ -1,7 +1,7 @@
 process REMOVE_DUPLICATES {
     cpus 1
     container "quay.io/biocontainers/seqkit:2.10.0--h9ee0642_0"
-    publishDir "${params.output}/remove-duplicates", mode: "copy"
+    publishDir "${params.results}/remove-duplicates", mode: "copy"
 
     input:
         tuple val(id), path(sequences)

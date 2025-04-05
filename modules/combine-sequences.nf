@@ -1,7 +1,7 @@
 process COMBINE_SEQUENCES {
     cpus 1
     container "MicroOceLab/python:1.0"
-    publishDir "${params.output}/combine-sequences", mode: "copy"
+    publishDir "${params.results}/combine-sequences", mode: "copy"
     cache "deep"
 
     input:
