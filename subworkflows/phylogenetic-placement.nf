@@ -110,7 +110,7 @@ workflow PHYLOGENETIC_PLACEMENT {
 
         if (params.make_pd_matrix) {
             CALCULATE_REFERENCE_SUBSTITUTION_MODEL(ch_reference_alignment)
-                .set {ch_reference_substitution.model}
+                .set {ch_reference_substitution}
             
             MAKE_REFERENCE_PHYLOGENY(ch_reference_alignment
                 .join(ch_reference_substitution.model))
