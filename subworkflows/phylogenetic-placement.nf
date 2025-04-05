@@ -1,13 +1,15 @@
 // Default module imports
-include { PREPARE_ID as PREPARE_REFERENCE_ID                                     } from '../modules/prepare-id'
-include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                     } from '../modules/fix-format'
-include { MAKE_ALIGNMENT as MAKE_REFERENCE_ALIGNMENT                             } from '../modules/make-alignment'
+include { PREPARE_ID as PREPARE_REFERENCE_ID                                    } from '../modules/prepare-id'
+include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                    } from '../modules/fix-format'
+include { MAKE_ALIGNMENT as MAKE_REFERENCE_ALIGNMENT                            } from '../modules/make-alignment'
+include { MAKE_APPENDED_ALIGNMENT                                               } from '../modules/make-appended-alignment'
+include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_APPENDED_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
+include { MAKE_PHYLOGENY as MAKE_APPENDED_PHYLOGENY                             } from '../modules/make-phylogeny'
+
+// Optional module imports
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_REFERENCE_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_REFERENCE_PHYLOGENY                             } from '../modules/make-phylogeny'
 include { MAKE_PD_MATRIX as MAKE_REFERENCE_PD_MATRIX                             } from '../modules/make-pd-matrix'
-include { MAKE_APPENDED_ALIGNMENT                                                } from '../modules/make-appended-alignment'
-include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_APPENDED_SUBSTITUTION_MODEL  } from '../modules/calculate-substitution-model'
-include { MAKE_PHYLOGENY as MAKE_APPENDED_PHYLOGENY                              } from '../modules/make-phylogeny'
 include { MAKE_PD_MATRIX as MAKE_APPENDED_PD_MATRIX                              } from '../modules/make-pd-matrix'
 
 // Module imports for params.reference_mode: 'consensus'

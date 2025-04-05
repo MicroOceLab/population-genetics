@@ -18,13 +18,15 @@ include { PREPARE_ID as PREPARE_QUERY_ID                                     } f
 include { FIX_FORMAT as FIX_QUERY_FORMAT                                     } from '../modules/fix-format'
 include { COMBINE_SEQUENCES as COMBINE_QUERY_SEQUENCES                       } from '../modules/combine-sequences'
 include { MAKE_ALIGNMENT as MAKE_QUERY_ALIGNMENT                             } from '../modules/make-alignment'
-include { GET_POLYMORPHIC_SITES                                              } from '../modules/get-polymorphic-sites'
-include { GET_HAPLOTYPE_DATA                                                 } from '../modules/get-haplotype-data'
 include { FIX_FORMAT as FIX_HAPLOTYPE_FORMAT                                 } from '../modules/fix-format'
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
-include { MAKE_PD_MATRIX as MAKE_QUERY_PD_MATRIX                             } from '../modules/make-pd-matrix'
 include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
+
+// Optional module imports
+include { GET_POLYMORPHIC_SITES                  } from '../modules/get-polymorphic-sites'
+include { GET_HAPLOTYPE_DATA                     } from '../modules/get-haplotype-data'
+include { MAKE_PD_MATRIX as MAKE_QUERY_PD_MATRIX } from '../modules/make-pd-matrix'
 
 // Module imports for params.query_mode: 'consensus' or 'all-consensus'
 include { MAKE_ALIGNMENT as MAKE_QUERY_SUBALIGNMENT    } from '../modules/make-alignment'
