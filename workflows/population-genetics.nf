@@ -17,7 +17,6 @@ if (params.reference && !params_reference.contains(params.reference)) {
 include { PREPARE_ID as PREPARE_QUERY_ID                                     } from '../modules/prepare-id'
 include { FIX_FORMAT as FIX_QUERY_FORMAT                                     } from '../modules/fix-format'
 include { COMBINE_SEQUENCES as COMBINE_QUERY_SEQUENCES                       } from '../modules/combine-sequences'
-include { REMOVE_DUPLICATES as REMOVE_QUERY_DUPLICATES                       } from '../modules/remove-duplicates'
 include { MAKE_ALIGNMENT as MAKE_QUERY_ALIGNMENT                             } from '../modules/make-alignment'
 include { GET_POLYMORPHIC_SITES                                              } from '../modules/get-polymorphic-sites'
 include { GET_HAPLOTYPE_DATA                                                 } from '../modules/get-haplotype-data'
@@ -75,11 +74,8 @@ workflow POPULATION_GENETICS {
                 .map {query_sequences -> query_sequences[1]}
                 .reduce("") {path_1, path_2 -> "$path_1 $path_2"}))
             .set {ch_combined_query_sequences}
-        
-        REMOVE_QUERY_DUPLICATES(ch_combined_query_sequences)
-            .set {ch_unique_query_sequences}
 
-        MAKE_QUERY_ALIGNMENT(ch_unique_query_sequences)
+        MAKE_QUERY_ALIGNMENT(ch_combined_query_sequences)
             .set {ch_query_alignment}
 
         GET_POLYMORPHIC_SITES(ch_query_alignment)
