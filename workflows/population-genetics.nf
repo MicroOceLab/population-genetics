@@ -19,6 +19,9 @@ include { FIX_FORMAT as FIX_QUERY_FORMAT                                     } f
 include { COMBINE_SEQUENCES as COMBINE_QUERY_SEQUENCES                       } from '../modules/combine-sequences'
 include { REMOVE_DUPLICATES as REMOVE_QUERY_DUPLICATES                       } from '../modules/remove-duplicates'
 include { MAKE_ALIGNMENT as MAKE_QUERY_ALIGNMENT                             } from '../modules/make-alignment'
+include { GET_POLYMORPHIC_SITES                                              } from '../modules/get-polymorphic-sites'
+include { GET_HAPLOTYPE_DATA                                                 } from '../modules/get-haplotype-data'
+include { FIX_FORMAT as FIX_HAPLOTYPE_FORMAT                                 } from '../modules/fix-format'
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
 include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
@@ -78,6 +81,15 @@ workflow POPULATION_GENETICS {
 
         MAKE_QUERY_ALIGNMENT(ch_unique_query_sequences)
             .set {ch_query_alignment}
+
+        GET_POLYMORPHIC_SITES(ch_query_alignment)
+            .set {ch_polymorphic_sites}
+        
+        GET_HAPLOTYPE_DATA(ch_query_alignment)
+            .set {ch_haplotype}
+
+        FIX_HAPLOTYPE_FORMAT(ch_haplotype.sequences)
+            .set {ch_formattedd_haplotype_sequences}
 
         CALCULATE_QUERY_SUBSTITUTION_MODEL(ch_query_alignment)
             .set {ch_query_substitution}
