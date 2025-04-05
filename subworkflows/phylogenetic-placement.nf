@@ -74,16 +74,24 @@ workflow PHYLOGENETIC_PLACEMENT {
             FIX_REFERENCE_CONSENSUS_FORMAT(ch_combined_reference_consensus)
                 .set {ch_final_reference_sequences}
 
-        } else if (params.reference_mode == "random") {
-            GET_RANDOM_REFERENCES(ch_formatted_reference_sequences)
-                .set {ch_random_reference_sequences}
+        } else {
+            ch_reference_sequences_to_combine = Channel.empty()
+            
+            if (params.reference_mode == "random") {
+                GET_RANDOM_REFERENCES(ch_formatted_reference_sequences)
+                    .set {ch_reference_sequences_to_combine}
+
+            } else if (params.reference_mode == "all") {
+                ch_formatted_reference_sequences
+                    .set {ch_reference_sequences_to_combine}
+            }
 
             Channel.of("combined-reference-sequences")
                 .set {ch_combined_reference_sequences_id}
 
             COMBINE_REFERENCE_SEQUENCES(ch_combined_reference_sequences_id
-                .combine(ch_random_reference_sequences
-                    .map {random_sequences -> random_sequences[1]}
+                .combine(ch_reference_sequences_to_combine
+                    .map {reference_sequences -> reference_sequences[1]}
                     .reduce("") {path_1, path_2 -> "$path_1 $path_2"}))
                 .set {ch_combined_reference_sequences}
 

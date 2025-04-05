@@ -7,7 +7,7 @@ if (!params.query_mode) {
     error "ERROR: Invalid query mode (--query_mode) specified for POPULATION_GENETICS workflow"
 }
 
-params_reference_modes = ["consensus", "random"]
+params_reference_modes = ["consensus", "random", "all"]
 if (params.reference_mode && !params_reference_modes.contains(params.reference_mode)) {
     error "ERROR: Invalid reference mode (--reference_mode) specified for PHYLOGENETIC_PLACEMENT subworkflow"
 }
