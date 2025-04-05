@@ -6,13 +6,13 @@ include { MAKE_APPENDED_ALIGNMENT                                               
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_APPENDED_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_APPENDED_PHYLOGENY                             } from '../modules/make-phylogeny'
 
-// Module imports for params.reference: 'consensus'
+// Module imports for params.reference_mode: 'consensus'
 include { MAKE_ALIGNMENT as MAKE_REFERENCE_SUBALIGNMENT                         } from '../modules/make-alignment'
 include { MAKE_CONSENSUS as MAKE_REFERENCE_CONSENSUS                            } from '../modules/make-consensus'
 include { COMBINE_SEQUENCES as COMBINE_REFERENCE_CONSENSUS                      } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_REFERENCE_CONSENSUS_FORMAT                          } from '../modules/fix-format'
 
-// Module imports for params.reference: 'ranodom'
+// Module imports for params.reference_mode: 'ranodom'
 include { GET_RANDOM_SEQUENCES as GET_RANDOM_REFERENCES                         } from '../modules/get-random-sequences'
 include { COMBINE_SEQUENCES as COMBINE_REFERENCE_SEQUENCES                      } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_REFERENCE_SEQUENCES_FORMAT                          } from '../modules/fix-format'
@@ -55,7 +55,7 @@ workflow PHYLOGENETIC_PLACEMENT {
 
         ch_final_reference_sequences = Channel.empty()
 
-        if (params.reference == "consensus") {
+        if (params.reference_mode == "consensus") {
             MAKE_REFERENCE_SUBALIGNMENT(ch_formatted_reference_sequences)
                 .set {ch_reference_subalignments}
                 
@@ -74,7 +74,7 @@ workflow PHYLOGENETIC_PLACEMENT {
             FIX_REFERENCE_CONSENSUS_FORMAT(ch_combined_reference_consensus)
                 .set {ch_final_reference_sequences}
 
-        } else if (params.reference == "random") {
+        } else if (params.reference_mode == "random") {
             GET_RANDOM_REFERENCES(ch_formatted_reference_sequences)
                 .set {ch_random_reference_sequences}
 

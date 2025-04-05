@@ -1,14 +1,14 @@
 // Error checks
-params_query = ["all", "all-consensus", "consensus"]
-if (!params.query) {
+params_query_modes = ["all", "all-consensus", "consensus"]
+if (!params.query_mode) {
     error "ERROR: Missing query mode (--query_mode) for main workflow"
     
-} else if (params.query && !params_query.contains(params.query)) {
+} else if (params.query_mode && !params_query_modes.contains(params.query_mode)) {
     error "ERROR: Invalid query mode (--query_mode) specified for POPULATION_GENETICS workflow"
 }
 
-params_reference = ["consensus", "random"]
-if (params.reference && !params_reference.contains(params.reference)) {
+params_reference_modes = ["consensus", "random"]
+if (params.reference_mode && !params_reference_modes.contains(params.reference_mode)) {
     error "ERROR: Invalid reference mode (--reference_mode) specified for PHYLOGENETIC_PLACEMENT subworkflow"
 }
 
@@ -25,7 +25,7 @@ include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } f
 include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
 include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
 
-// Module imports for params.query: 'consensus' or 'all-consensus'
+// Module imports for params.query_mode: 'consensus' or 'all-consensus'
 include { MAKE_ALIGNMENT as MAKE_QUERY_SUBALIGNMENT                          } from '../modules/make-alignment'
 include { COMBINE_SEQUENCES as COMBINE_QUERY_CONSENSUS                       } from '../modules/combine-sequences'
 include { FIX_FORMAT as FIX_QUERY_CONSENSUS_FORMAT                           } from '../modules/fix-format'
@@ -96,7 +96,7 @@ workflow POPULATION_GENETICS {
 
         ch_final_query_sequences = Channel.empty()
 
-        if (params.query == "consensus") {
+        if (params.query_mode == "consensus") {
             MAKE_QUERY_SUBALIGNMENT(ch_formatted_query_sequences)
                 .set {ch_query_subalignments}
 
@@ -115,19 +115,19 @@ workflow POPULATION_GENETICS {
             FIX_QUERY_CONSENSUS_FORMAT(ch_combined_query_consensus)
                 .set {ch_final_query_sequences}
 
-        } else if (params.query == "all-consensus") {
+        } else if (params.query_mode == "all-consensus") {
             MAKE_QUERY_CONSENSUS(ch_query_alignment)
                 .set {ch_query_consensus}
 
             FIX_QUERY_CONSENSUS_FORMAT(ch_query_consensus)
                 .set {ch_final_query_sequences}
 
-        } else if (params.query == "all") {
+        } else if (params.query_mode == "all") {
             ch_combined_query_sequences
                 .set {ch_final_query_sequences}
         }
 
-        if (params.reference) {
+        if (params.reference_mode) {
             PHYLOGENETIC_PLACEMENT(ch_final_query_sequences)
         }
 }
