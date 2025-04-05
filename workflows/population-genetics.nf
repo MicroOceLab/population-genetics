@@ -104,7 +104,7 @@ workflow POPULATION_GENETICS {
         
 
         if (params.make_pd_matrix) {
-            MAKE_PD_MATRIX(ch_query_phylogeny.best_tree)
+            MAKE_QUERY_PD_MATRIX(ch_query_phylogeny.best_tree)
                 .set {ch_query_pd}
         }
 
