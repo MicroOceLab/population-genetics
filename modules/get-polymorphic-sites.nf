@@ -11,6 +11,6 @@ process GET_POLYMORPHIC_SITES {
 
     script:
         """
-        get-polymorphic-sites.R ${sequences} ${id}-polymorphic-sites.txt
+        get-polymorphic-sites.R ${sequences} ${id}-polymorphic-sites
         """
 }

@@ -14,6 +14,6 @@ process GET_HAPLOTYPE_DATA {
 
     script:
         """
-        get-haplotype-data.R ${sequences} ${id}-haplotypes.txt
+        get-haplotype-data.R ${sequences} ${id}-haplotypes
         """
 }
