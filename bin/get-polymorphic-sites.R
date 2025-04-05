@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
 
 # Packages
+options(warn=-1)
 library(ape)
 library(pegas)
 library(glue)
