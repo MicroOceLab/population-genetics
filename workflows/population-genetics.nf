@@ -23,12 +23,13 @@ include { GET_HAPLOTYPE_DATA                                                 } f
 include { FIX_FORMAT as FIX_HAPLOTYPE_FORMAT                                 } from '../modules/fix-format'
 include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_QUERY_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
 include { MAKE_PHYLOGENY as MAKE_QUERY_PHYLOGENY                             } from '../modules/make-phylogeny'
+include { MAKE_PD_MATRIX as MAKE_QUERY_PD_MATRIX                             } from '../modules/make-pd-matrix'
 include { MAKE_CONSENSUS as MAKE_QUERY_CONSENSUS                             } from '../modules/make-consensus'
 
 // Module imports for params.query_mode: 'consensus' or 'all-consensus'
-include { MAKE_ALIGNMENT as MAKE_QUERY_SUBALIGNMENT                          } from '../modules/make-alignment'
-include { COMBINE_SEQUENCES as COMBINE_QUERY_CONSENSUS                       } from '../modules/combine-sequences'
-include { FIX_FORMAT as FIX_QUERY_CONSENSUS_FORMAT                           } from '../modules/fix-format'
+include { MAKE_ALIGNMENT as MAKE_QUERY_SUBALIGNMENT    } from '../modules/make-alignment'
+include { COMBINE_SEQUENCES as COMBINE_QUERY_CONSENSUS } from '../modules/combine-sequences'
+include { FIX_FORMAT as FIX_QUERY_CONSENSUS_FORMAT     } from '../modules/fix-format'
 
 // Default subworkflow import
 include { PHYLOGENETIC_PLACEMENT } from '../subworkflows/phylogenetic-placement'
@@ -91,8 +92,11 @@ workflow POPULATION_GENETICS {
             .set {ch_query_substitution}
 
         MAKE_QUERY_PHYLOGENY(ch_query_alignment
-                .join(ch_query_substitution.model))
-                .set {ch_query_phylogeny}
+            .join(ch_query_substitution.model))
+            .set {ch_query_phylogeny}
+        
+        MAKE_PD_MATRIX(ch_query_phylogeny.best_tree)
+            .set {ch_query_pd}
 
         ch_final_query_sequences = Channel.empty()
 

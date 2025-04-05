@@ -1,21 +1,25 @@
 // Default module imports
-include { PREPARE_ID as PREPARE_REFERENCE_ID                                    } from '../modules/prepare-id'
-include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                    } from '../modules/fix-format'
-include { MAKE_ALIGNMENT as MAKE_REFERENCE_ALIGNMENT                            } from '../modules/make-alignment'
-include { MAKE_APPENDED_ALIGNMENT                                               } from '../modules/make-appended-alignment'
-include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_APPENDED_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
-include { MAKE_PHYLOGENY as MAKE_APPENDED_PHYLOGENY                             } from '../modules/make-phylogeny'
+include { PREPARE_ID as PREPARE_REFERENCE_ID                                     } from '../modules/prepare-id'
+include { FIX_FORMAT as FIX_REFERENCE_FORMAT                                     } from '../modules/fix-format'
+include { MAKE_ALIGNMENT as MAKE_REFERENCE_ALIGNMENT                             } from '../modules/make-alignment'
+include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_REFERENCE_SUBSTITUTION_MODEL } from '../modules/calculate-substitution-model'
+include { MAKE_PHYLOGENY as MAKE_REFERENCE_PHYLOGENY                             } from '../modules/make-phylogeny'
+include { MAKE_PD_MATRIX as MAKE_REFERENCE_PD_MATRIX                             } from '../modules/make-pd-matrix'
+include { MAKE_APPENDED_ALIGNMENT                                                } from '../modules/make-appended-alignment'
+include { CALCULATE_SUBSTITUTION_MODEL as CALCULATE_APPENDED_SUBSTITUTION_MODEL  } from '../modules/calculate-substitution-model'
+include { MAKE_PHYLOGENY as MAKE_APPENDED_PHYLOGENY                              } from '../modules/make-phylogeny'
+include { MAKE_PD_MATRIX as MAKE_APPENDED_PD_MATRIX                              } from '../modules/make-pd-matrix'
 
 // Module imports for params.reference_mode: 'consensus'
-include { MAKE_ALIGNMENT as MAKE_REFERENCE_SUBALIGNMENT                         } from '../modules/make-alignment'
-include { MAKE_CONSENSUS as MAKE_REFERENCE_CONSENSUS                            } from '../modules/make-consensus'
-include { COMBINE_SEQUENCES as COMBINE_REFERENCE_CONSENSUS                      } from '../modules/combine-sequences'
-include { FIX_FORMAT as FIX_REFERENCE_CONSENSUS_FORMAT                          } from '../modules/fix-format'
+include { MAKE_ALIGNMENT as MAKE_REFERENCE_SUBALIGNMENT    } from '../modules/make-alignment'
+include { MAKE_CONSENSUS as MAKE_REFERENCE_CONSENSUS       } from '../modules/make-consensus'
+include { COMBINE_SEQUENCES as COMBINE_REFERENCE_CONSENSUS } from '../modules/combine-sequences'
+include { FIX_FORMAT as FIX_REFERENCE_CONSENSUS_FORMAT     } from '../modules/fix-format'
 
 // Module imports for params.reference_mode: 'ranodom'
-include { GET_RANDOM_SEQUENCES as GET_RANDOM_REFERENCES                         } from '../modules/get-random-sequences'
-include { COMBINE_SEQUENCES as COMBINE_REFERENCE_SEQUENCES                      } from '../modules/combine-sequences'
-include { FIX_FORMAT as FIX_REFERENCE_SEQUENCES_FORMAT                          } from '../modules/fix-format'
+include { GET_RANDOM_SEQUENCES as GET_RANDOM_REFERENCES    } from '../modules/get-random-sequences'
+include { COMBINE_SEQUENCES as COMBINE_REFERENCE_SEQUENCES } from '../modules/combine-sequences'
+include { FIX_FORMAT as FIX_REFERENCE_SEQUENCES_FORMAT     } from '../modules/fix-format'
 
 
 workflow PHYLOGENETIC_PLACEMENT {
@@ -102,6 +106,16 @@ workflow PHYLOGENETIC_PLACEMENT {
         MAKE_REFERENCE_ALIGNMENT(ch_final_reference_sequences)
             .set {ch_reference_alignment}
 
+        CALCULATE_REFERENCE_SUBSTITUTION_MODEL(ch_reference_alignment)
+            .set {ch_reference_substitution.model}
+        
+        MAKE_REFERENCE_PHYLOGENY(ch_reference_alignment
+            .join(ch_reference_substitution.model))
+            .set {ch_reference_phylogeny}
+        
+        MAKE_REFERENCE_PD_MATRIX(ch_reference_phylogeny.best_tree)
+            .set {ch_reference_pd}
+
         Channel.of("appended")
             .set {ch_appended_id}
 
@@ -118,4 +132,7 @@ workflow PHYLOGENETIC_PLACEMENT {
         MAKE_APPENDED_PHYLOGENY(ch_appended_alignment
             .join(ch_appended_substitution.model))
             .set {ch_appended_phylogeny}
+        
+        MAKE_APPENDED_PD_MATRIX(ch_appended_phylogeny.best_tree)
+            .set {ch_appended_pd}
 }
