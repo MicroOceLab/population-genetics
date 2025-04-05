@@ -79,14 +79,19 @@ workflow POPULATION_GENETICS {
         MAKE_QUERY_ALIGNMENT(ch_combined_query_sequences)
             .set {ch_query_alignment}
 
-        GET_POLYMORPHIC_SITES(ch_query_alignment)
-            .set {ch_polymorphic_sites}
         
-        GET_HAPLOTYPE_DATA(ch_query_alignment)
-            .set {ch_haplotype}
+        if (params.get_polymorphic_sites){
+            GET_POLYMORPHIC_SITES(ch_query_alignment)
+                .set {ch_polymorphic_sites}
+        }
+        
+        if (params.get_haplotype_data){
+            GET_HAPLOTYPE_DATA(ch_query_alignment)
+                .set {ch_haplotype}
 
-        FIX_HAPLOTYPE_FORMAT(ch_haplotype.sequences)
-            .set {ch_formattedd_haplotype_sequences}
+            FIX_HAPLOTYPE_FORMAT(ch_haplotype.sequences)
+                .set {ch_formattedd_haplotype_sequences}
+        }
 
         CALCULATE_QUERY_SUBSTITUTION_MODEL(ch_query_alignment)
             .set {ch_query_substitution}
@@ -95,8 +100,11 @@ workflow POPULATION_GENETICS {
             .join(ch_query_substitution.model))
             .set {ch_query_phylogeny}
         
-        MAKE_PD_MATRIX(ch_query_phylogeny.best_tree)
-            .set {ch_query_pd}
+
+        if (params.make_pd_matrix) {
+            MAKE_PD_MATRIX(ch_query_phylogeny.best_tree)
+                .set {ch_query_pd}
+        }
 
         ch_final_query_sequences = Channel.empty()
 

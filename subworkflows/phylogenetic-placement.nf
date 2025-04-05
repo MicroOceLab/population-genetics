@@ -106,16 +106,18 @@ workflow PHYLOGENETIC_PLACEMENT {
         MAKE_REFERENCE_ALIGNMENT(ch_final_reference_sequences)
             .set {ch_reference_alignment}
 
-        CALCULATE_REFERENCE_SUBSTITUTION_MODEL(ch_reference_alignment)
-            .set {ch_reference_substitution.model}
+        if (params.make_pd_matrix) {
+            CALCULATE_REFERENCE_SUBSTITUTION_MODEL(ch_reference_alignment)
+                .set {ch_reference_substitution.model}
+            
+            MAKE_REFERENCE_PHYLOGENY(ch_reference_alignment
+                .join(ch_reference_substitution.model))
+                .set {ch_reference_phylogeny}
+            
+            MAKE_REFERENCE_PD_MATRIX(ch_reference_phylogeny.best_tree)
+                .set {ch_reference_pd}
+        }
         
-        MAKE_REFERENCE_PHYLOGENY(ch_reference_alignment
-            .join(ch_reference_substitution.model))
-            .set {ch_reference_phylogeny}
-        
-        MAKE_REFERENCE_PD_MATRIX(ch_reference_phylogeny.best_tree)
-            .set {ch_reference_pd}
-
         Channel.of("appended")
             .set {ch_appended_id}
 
@@ -133,6 +135,8 @@ workflow PHYLOGENETIC_PLACEMENT {
             .join(ch_appended_substitution.model))
             .set {ch_appended_phylogeny}
         
-        MAKE_APPENDED_PD_MATRIX(ch_appended_phylogeny.best_tree)
-            .set {ch_appended_pd}
+        if (params.make_pd_matrix) {
+            MAKE_APPENDED_PD_MATRIX(ch_appended_phylogeny.best_tree)
+                .set {ch_appended_pd}
+        }       
 }
