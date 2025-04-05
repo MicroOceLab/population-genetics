@@ -1,15 +1,15 @@
 // Error checks
 params_query = ["all", "all-consensus", "consensus"]
 if (!params.query) {
-    error "ERROR: Missing query mode (--query) for main workflow"
+    error "ERROR: Missing query mode (--query_mode) for main workflow"
     
 } else if (params.query && !params_query.contains(params.query)) {
-    error "ERROR: Invalid query mode (--query) specified for POPULATION_GENETICS workflow"
+    error "ERROR: Invalid query mode (--query_mode) specified for POPULATION_GENETICS workflow"
 }
 
 params_reference = ["consensus", "random"]
 if (params.reference && !params_reference.contains(params.reference)) {
-    error "ERROR: Invalid reference mode (--reference) specified for PHYLOGENETIC_PLACEMENT subworkflow"
+    error "ERROR: Invalid reference mode (--reference_mode) specified for PHYLOGENETIC_PLACEMENT subworkflow"
 }
 
 
