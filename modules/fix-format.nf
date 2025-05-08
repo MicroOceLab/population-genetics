@@ -1,5 +1,6 @@
 process FIX_FORMAT {
     cpus 1
+    memory "2 GB"
     container "quay.io/biocontainers/seqkit:2.10.0--h9ee0642_0"
     publishDir "${params.results}/fix-format", mode: "copy"
 

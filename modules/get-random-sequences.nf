@@ -1,5 +1,6 @@
 process GET_RANDOM_SEQUENCES {
     cpus 2
+    memory "2 GB"
     container "MicroOceLab/python:1.0"
     publishDir "${params.results}/get-random-sequences", mode: "copy"
 

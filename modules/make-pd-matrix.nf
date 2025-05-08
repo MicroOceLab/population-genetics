@@ -1,5 +1,6 @@
 process MAKE_PD_MATRIX {
-    cpus 2
+    cpus 4
+    memory "12 GB"
     container "MicroOceLab/r:1.0"
     publishDir "${params.results}/make-pd-matrix", mode: "copy"
 

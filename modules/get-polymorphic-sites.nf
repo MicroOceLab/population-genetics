@@ -1,5 +1,6 @@
 process GET_POLYMORPHIC_SITES {
     cpus 2
+    memory "4 GB"
     container "MicroOceLab/r:1.0"
     publishDir "${params.results}/get-polymorphic-sites", mode: "copy"
 

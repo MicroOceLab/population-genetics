@@ -1,5 +1,6 @@
 process GET_HAPLOTYPE_DATA {
     cpus 4
+    memory "8 GB"
     container "MicroOceLab/r:1.0"
     publishDir "${params.results}/get-haplotype-data", mode: "copy"
 

@@ -1,5 +1,6 @@
 process MAKE_APPENDED_ALIGNMENT {
     cpus 8
+    memory "12 GB"
     container "quay.io/biocontainers/mafft:7.221--0"
     publishDir "${params.results}/make-appended-alignment", mode: "copy"
 

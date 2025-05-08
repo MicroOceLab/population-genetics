@@ -1,5 +1,6 @@
 process MAKE_CONSENSUS {
     cpus 8
+    memory "8 GB"
     container "quay.io/biocontainers/emboss:5.0.0--h362c646_6"
     publishDir "${params.results}/make-consensus", mode: "copy"
 
